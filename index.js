@@ -3,7 +3,7 @@
 const chalk = require('chalk');
 const clear = require('clear');
 const figlet = require('figlet');
-const vso = require('./lib/vso');
+const cfg = require('./lib/config');
 const files = require('./lib/files');
 
 clear();
@@ -18,35 +18,22 @@ if (files.fileExists('.stool')) {
   process.exit();
 }
 
-const getToken = async () => {
-  // Fetch token from config store
-  let token = vso.getStoredToken();
-  if (token) {
-    return token;
+//C:\Emerson\src\git\SchedulePro
+
+const getConfig = async () => {
+  let config = cfg.getStoredConfiguration();
+  if (config) {
+    return config;
   }
-  // return "No token found";
-  // No token found, use credentials to access github account
-  // await github.setGithubCredentials();
-
-  // // Check if access token for ginit was registered
-  // const accessToken = await github.hasAccessToken();
-  // if(accessToken) {
-  //   console.log(chalk.yellow('An existing access token has been found!'));
-  //   // ask user to regenerate a new token
-  //   token = await github.regenerateNewToken(accessToken.id);
-  //   return token;
-  // }
-
-  // // No access token found, register one now
-  token = await vso.registerNewToken();
-  return token;
+  config = await cfg.registerNewConfiguration();
+  return config;
 }
 
 
 const run = async () => {
   try {
     // Retrieve & Set Authentication Token
-    const token = await getToken();
+    const config = await getConfig();
     //await console.log("Token: ", token);
     // github.githubAuth(token);
 
